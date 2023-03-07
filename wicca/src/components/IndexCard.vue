@@ -1,11 +1,13 @@
 <script setup>
 import DistChart from "./DistChart.vue";
+import JoinCard from "./JoinCard.vue";
 </script>
 <script>
 import {
   getTokenName,
   getInputTokenName,
   getIndexTokenWeights,
+  getMonthName,
 } from "../assets/js/interface_request.js";
 export default {
   props: ["address"],
@@ -13,6 +15,13 @@ export default {
     return {
       inputToken: "",
       weights: [],
+      joinCardKey: 0,
+
+      joined: false,
+      buttonText: "Join",
+      from: "-",
+      to: "-",
+      interval: "-",
     };
   },
   methods: {
@@ -23,6 +32,16 @@ export default {
         str += getTokenName(i) + "/";
       }
       return str.substring(0, str.length - 1);
+    },
+    updateOnEnroll(msg) {
+      if ( this.address !== msg[0] ) return;
+      // update style & info (joined card)
+
+      this.joined = true;
+      this.buttonText = "Withdraw";
+      this.from = "2023 MAR";
+      this.to = "2023 " + (getMonthName((3 + parseInt(msg[1])) % 12).toUpperCase()).substring(0, 3);
+      this.interval = msg[2] + " days";
     },
   },
   mounted() {
@@ -39,11 +58,18 @@ export default {
     getInputTokenName(this.address).then((result) => {
       if (result) this.inputToken = result;
     });
+
+    this.emitter.on("join-update-event", (msg) => {
+      this.updateOnEnroll(msg);
+    });
   },
 };
 </script>
 <template>
-  <div class="uk-card uk-card-default golden-gradient rotate">
+  <div
+    class="uk-card uk-card-default rotate"
+    :class="{ 'default-gradient': !joined, 'golden-gradient': joined }"
+  >
     <div class="uk-card-media-top">
       <img src="../img/sample.png" width="1800" height="1200" alt="" />
     </div>
@@ -79,28 +105,44 @@ export default {
             <div>
               <span class="text-xsmall" style="font-weight: 500">From</span><br /><span
                 class="text-small"
-                >-</span
+                >{{ from }}</span
               >
             </div>
             <div>
               <span class="text-xsmall" style="font-weight: 500">To</span><br /><span
                 class="text-small"
-                >-</span
+                >{{ to }}</span
               >
             </div>
             <div>
               <span class="text-xsmall" style="font-weight: 500">Interval</span
-              ><br /><span class="text-small">-</span>
+              ><br /><span class="text-small">{{ interval }}</span>
             </div>
           </div>
         </div>
-        <button class="uk-button btn-gradient-border">Join</button>
+        <a href="#join-modal-center" :disabled="joined" uk-toggle>
+          <button
+            class="uk-button"
+            :class="{ 'btn-gradient-border': !joined, 'black' : joined }"
+            :disabled="joined"
+            @click="joinCardKey++"
+          >
+            {{ buttonText }}
+          </button></a
+        >
+        <div id="join-modal-center" class="uk-flex-top" bg-close="false" uk-modal>
+          <JoinCard :address="address" :key="joinCardKey" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.black {
+  color: black;
+}
+
 .uk-card-title {
   font-size: 1rem;
 }

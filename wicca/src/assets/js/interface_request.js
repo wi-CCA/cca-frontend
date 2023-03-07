@@ -4,7 +4,7 @@
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers } from "ethers";
 import { FACTORY_ADDR, FACTORY_ABI, CARD_ADDR_0, CARD_ADDR_1, CARD_ADDR_2, CARD_ABI, TOKEN_ADDR_0, TOKEN_ADDR_1, TOKEN_ADDR_2, TOKEN_ADDR_3, TOKEN_ADDR_4, TOKEN_ADDR_5, TOKEN_ABI } from "./contract.js"
-import { create_contract, wits_contract, weights_contract, inputToken_contract, outputTokens_contract } from "./contract_request.js"
+import { create_contract, wits_contract, weights_contract, inputToken_contract, outputTokens_contract, enroll_contract } from "./contract_request.js"
 const testChainId = '0x13881';
 const RPCUrl = 'https://matic-mumbai.chainstacklabs.com';
 const blockExploreUrl = 'https://mumbai.polygonscan.com';
@@ -252,4 +252,26 @@ async function getIndexTokenWeights(addr) {
     return result;
 }
 
-export { connectContract, connectMetamask, getAccount, getContract, getTokenName, getTokenColor, create, getCardAdressList, getInputTokenName, getIndexTokenWeights };
+async function enroll(addr) {
+    if (!(addr in contract_cards)) {
+        contract_cards[addr] = await new window.web3.eth.Contract(CARD_ABI, addr);
+    }
+    let _contract = contract_cards[addr];
+    if (_contract === '' || getAccount() === '') return result;
+
+    // TODO; dummy values
+    let amount_ = 0;
+    let startBlock = 0;
+    let endBlock = 0;
+    let interval = 0;
+
+    let response = await enroll_contract(_contract, getAccount(), getAccount(), amount_, startBlock, endBlock, interval);
+    return response;
+}
+
+function getMonthName(monthNumber) {
+    const date = new Date();
+    date.setMonth(monthNumber - 1);
+    return date.toLocaleString('en-US', { month: 'long' });
+}
+export { connectContract, connectMetamask, getAccount, getContract, getTokenName, getTokenColor, create, getCardAdressList, getInputTokenName, getIndexTokenWeights, enroll, getMonthName };

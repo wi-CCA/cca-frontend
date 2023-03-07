@@ -35,4 +35,11 @@ async function outputTokens_contract(contract_, account_, index_) {
     return response;
 }
 
-export { create_contract, wits_contract, weights_contract, inputToken_contract, outputTokens_contract };
+async function enroll_contract(contract_, account_, to_, amount_, startBlock, endBlock, interval) {
+    //console.log("-- [request] enroll");
+    let response = await contract_.methods.enroll(to_, amount_, startBlock, endBlock, interval).send({ from: account_ });
+    //console.log("-- [response] enroll :", response);
+    return response;
+}
+
+export { create_contract, wits_contract, weights_contract, inputToken_contract, outputTokens_contract, enroll_contract };

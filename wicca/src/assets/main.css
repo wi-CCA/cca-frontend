@@ -138,6 +138,13 @@
 }
 
 .golden-gradient {
+  background: linear-gradient(120deg, #fff8d8e0 20%, #fff8d8e0 40%, #f5eabae0 50%, #f5eabae0 55%, #fff8d8e0 70%, #fff8d8e0 100%);
+  background-size: 200% auto;
+  animation: shine 3s linear infinite;
+  box-shadow: 0 0 20px rgba(255, 247, 175, 0.5);
+}
+
+.default-gradient {
   background: linear-gradient(120deg, #ffffffe0 20%, #ffffffe0 40%, #ffffff 50%, #ffffff 55%, #ffffffe0 70%, #ffffffe0 100%);
   background-size: 200% auto;
   animation: shine 3s linear infinite;
