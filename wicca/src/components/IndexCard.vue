@@ -1,6 +1,47 @@
 <script setup>
 import DistChart from "./DistChart.vue";
 </script>
+<script>
+import {
+  getTokenName,
+  getInputTokenName,
+  getIndexTokenWeights,
+} from "../assets/js/interface_request.js";
+export default {
+  props: ["address"],
+  data() {
+    return {
+      inputToken: "",
+      weights: [],
+    };
+  },
+  methods: {
+    getIndexTokenNames() {
+      let str = "";
+      for (var i = 0; i < this.weights.length; i++) {
+        if (this.weights[i] === 0) continue;
+        str += getTokenName(i) + "/";
+      }
+      return str.substring(0, str.length - 1);
+    },
+  },
+  mounted() {
+    console.log("MOUNT", this.address);
+    getIndexTokenWeights(this.address).then((result) => {
+      if (result) {
+        console.log("getIndexTokenWeights success");
+        for (var i = 0; i < result.length; i++) this.weights.push(parseInt(result[i]));
+      } else {
+        console.log("getIndexTokenWeights failed!");
+      }
+    });
+
+    getInputTokenName(this.address).then((result) => {
+      if (result) this.inputToken = result;
+    });
+  },
+};
+</script>
 <template>
   <div class="uk-card uk-card-default golden-gradient rotate">
     <div class="uk-card-media-top">
@@ -19,36 +60,37 @@ import DistChart from "./DistChart.vue";
           />
         </div>
         <div class="uk-text-center padding-top-only">
-          <p class="uk-text-meta uk-margin-remove-top uk-margin-remove-bottom">
-            <span class="text-small">@Luke Park</span> <br />
-            <span class="text-xsmall">6 joined</span>
+          <p
+            class="text-address uk-text-meta uk-margin-remove-top uk-margin-remove-bottom"
+          >
+            <span class="text-small">@{{ address }}</span>
           </p>
         </div>
       </div>
       <div class="uk-card-body uk-text-center padding-small">
-        <h3 class="uk-card-title uk-margin-remove-bottom">BTC/USDT Daily</h3>
-        <div class="chart-padding"><DistChart /></div>
-        <p class="text-small uk-margin-remove-top">
-          Today candle show that market respon to Higher Low. Lorem ipsum dolor sit amet,
-          consectetur adipiscing elit, sed do eiusmod tempor incididunt.
-        </p>
+        <h3 class="uk-card-title uk-margin-remove-bottom">
+          {{ inputToken }}<br />⬇️<br />{{ getIndexTokenNames() }}
+        </h3>
+        <div class="chart-padding">
+          <DistChart :key="address" :weights="weights" />
+        </div>
         <div class="uk-margin uk-margin-remove-top">
           <div class="uk-child-width-expand@s" uk-grid>
             <div>
               <span class="text-xsmall" style="font-weight: 500">From</span><br /><span
                 class="text-small"
-                >2023 JAN</span
+                >-</span
               >
             </div>
             <div>
               <span class="text-xsmall" style="font-weight: 500">To</span><br /><span
                 class="text-small"
-                >2023 MAY</span
+                >-</span
               >
             </div>
             <div>
               <span class="text-xsmall" style="font-weight: 500">Interval</span
-              ><br /><span class="text-small">7 days</span>
+              ><br /><span class="text-small">-</span>
             </div>
           </div>
         </div>
@@ -61,6 +103,11 @@ import DistChart from "./DistChart.vue";
 <style scoped>
 .uk-card-title {
   font-size: 1rem;
+}
+
+.text-address {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .text-small {

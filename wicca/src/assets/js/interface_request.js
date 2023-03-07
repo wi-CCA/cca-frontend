@@ -4,7 +4,7 @@
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers } from "ethers";
 import { FACTORY_ADDR, FACTORY_ABI, CARD_ADDR_0, CARD_ADDR_1, CARD_ADDR_2, CARD_ABI, TOKEN_ADDR_0, TOKEN_ADDR_1, TOKEN_ADDR_2, TOKEN_ADDR_3, TOKEN_ADDR_4, TOKEN_ADDR_5, TOKEN_ABI } from "./contract.js"
-import { create_contract } from "./contract_request.js"
+import { create_contract, wits_contract, weights_contract, inputToken_contract, outputTokens_contract } from "./contract_request.js"
 const testChainId = '0x13881';
 const RPCUrl = 'https://matic-mumbai.chainstacklabs.com';
 const blockExploreUrl = 'https://mumbai.polygonscan.com';
@@ -17,7 +17,7 @@ let address_tokens = [TOKEN_ADDR_0, TOKEN_ADDR_1, TOKEN_ADDR_2, TOKEN_ADDR_3, TO
 
 let contract_factory = '';
 let contract_tokens = [];
-let contract_cards = [];
+let contract_cards = {};
 
 /* 
  * Initialize functions
@@ -26,7 +26,6 @@ async function connectContract() {
     console.log("connect to contract!");
     window.web3 = new Web3(window.ethereum);
     contract_factory = await new window.web3.eth.Contract(FACTORY_ABI, FACTORY_ADDR);
-    for (var i = 0; i < address_cards.length; i++) { contract_cards.push(await new window.web3.eth.Contract(CARD_ABI, address_cards[i])); }
     for (var i = 0; i < address_tokens.length; i++) { contract_tokens.push(await new window.web3.eth.Contract(TOKEN_ABI, address_tokens[i])); }
     console.log("connect to contract done.");
 }
@@ -82,6 +81,7 @@ async function connectMetamask() {
                     // set global variables (contract, account)
                     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
                     account = accounts[0];
+
                     return true;
                 } catch (addError) {
                     console.log(addError);
@@ -128,15 +128,17 @@ function getTokenName(index) {
     if (index === "3" || index === 3) return "LINK";
     if (index === "4" || index === 4) return "WICCA";
     if (index === "5" || index === 5) return "USDC";
+    return "";
 }
 
-function getTokenColor(index){
+function getTokenColor(index) {
     if (index === "0" || index === 0) return "green";
     if (index === "1" || index === 1) return "blue";
     if (index === "2" || index === 2) return "orange";
     if (index === "3" || index === 3) return "cyan";
     if (index === "4" || index === 4) return "purple";
     if (index === "5" || index === 5) return "red";
+    return "";
 }
 
 /*
@@ -197,4 +199,57 @@ async function create(inputToken_, weights_) {
     return response;
 }
 
-export { connectContract, connectMetamask, getAccount, getContract, getTokenName, getTokenColor, create };
+async function getCardAdressList() {
+    let result = [];
+    let _contract = getContract("FACTORY");
+    if (_contract === '' || getAccount() === '') return result;
+
+    let i = 0;
+    while (true) {
+        try {
+            result.push(await wits_contract(_contract, getAccount(), i++));
+        }
+        catch { console.log("catch cardAddressList!"); break; }
+    }
+    return result;
+}
+
+async function getInputTokenName(addr) {
+    if (!(addr in contract_cards)) {
+        contract_cards[addr] = await new window.web3.eth.Contract(CARD_ABI, addr);
+    }
+    let _contract = contract_cards[addr];
+    if (_contract === '' || getAccount() === '') return result;
+
+    let result = await inputToken_contract(_contract, getAccount());
+    const findIndex = address_tokens.indexOf(result);
+    return getTokenName(findIndex);
+}
+
+async function getIndexTokenWeights(addr) {
+    if (!(addr in contract_cards)) {
+        contract_cards[addr] = await new window.web3.eth.Contract(CARD_ABI, addr);
+    }
+    let _contract = contract_cards[addr];
+    if (_contract === '' || getAccount() === '') return result;
+
+    let tokenAddressList = [];
+
+    let idx = 0;
+    while (true) {
+        try {
+            tokenAddressList.push(await outputTokens_contract(_contract, getAccount(), idx++));
+        }
+        catch { console.log("catch getIndexTokenWeights!"); break; }
+    }
+
+    let result = [0, 0, 0, 0, 0, 0];
+    for (var i = 0; i < tokenAddressList.length; i++) {
+        const findIndex = address_tokens.indexOf(tokenAddressList[i]);
+        result[findIndex] = (await weights_contract(_contract, getAccount(), i));
+    }
+
+    return result;
+}
+
+export { connectContract, connectMetamask, getAccount, getContract, getTokenName, getTokenColor, create, getCardAdressList, getInputTokenName, getIndexTokenWeights };

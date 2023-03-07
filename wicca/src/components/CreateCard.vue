@@ -77,6 +77,7 @@ export default {
         if (result) {
             console.log("create success!");
             /* modal close & update cards */
+            this.emitter.emit("card-update-event", true);
         }
         else console.log("create failed!");
       });

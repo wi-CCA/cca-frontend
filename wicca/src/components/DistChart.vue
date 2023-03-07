@@ -1,7 +1,7 @@
 <script>
 import { getTokenName, getTokenColor } from "../assets/js/interface_request.js";
 export default {
-  props: ["tokens", "weights"],
+  props: ["weights"],
   methods: {
     getTokenColor(id) {
       return getTokenColor(id);
@@ -32,21 +32,19 @@ export default {
 <template>
   <div>
     <div
-      v-if="tokens && tokens.length"
       :uk-tooltip="getTooltip()"
       class="uk-width-1-1"
       style="height: 20px; display: flex"
     >
       <div
-        v-for="(token, index) in tokens"
+        v-for="(weight, index) in weights"
         :key="index"
         class="comp"
-        :style="{ width: getTokenRatio(token.id), background: getTokenColor(token.id) }"
+        :style="{ width: getTokenRatio(index), background: getTokenColor(index) }"
       ></div>
     </div>
     
-    <div
-      v-else
+    <!--div
       class="uk-width-1-1"
       style="height: 20px; display: flex"
     >
@@ -57,10 +55,9 @@ export default {
       <div class="comp" style="width: 3%; background: blue"></div>
       <div class="comp" style="width: 3%; background: cyan"></div>
       <div class="comp" style="width: 1%; background: black"></div>
-    </div>
+    </div-->
 
     <!--div>
-      {{ tokens }}
       {{ weights }}
     </div-->
   </div>

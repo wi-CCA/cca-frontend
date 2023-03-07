@@ -1,18 +1,38 @@
 /* Factory */
 async function create_contract(contract_, account_, inputToken_, outputTokens_, weights_) {
-    console.log("-- [request] create");
+    //console.log("-- [request] create");
     let response = await contract_.methods.create(inputToken_, outputTokens_, weights_).send({ from: account_ });
-    console.log("-- [response] create :", response);
+    //console.log("-- [response] create :", response);
     return response;
 }
 
-/* Call */
-/*
-async function allowance_contract(_contract, _account, _address) {
-    console.log("-- [request] allowance");
-    let response = await _contract.methods.allowance(_account, _address).call();
-    console.log("-- [response] allowance :", response);
+async function wits_contract(contract_, account_, index_) {
+    //console.log("-- [request] wits");
+    let response = await contract_.methods.wits(index_).call({ from: account_ });
+    //console.log("-- [response] wits :", response);
     return response;
 }
-*/
-export { create_contract };
+
+/* Index Token */
+async function weights_contract(contract_, account_, index_) {
+    //console.log("-- [request] weights");
+    let response = await contract_.methods.weights(index_).call({ from: account_ });
+    //console.log("-- [response] weights :", response);
+    return response;
+}
+
+async function inputToken_contract(contract_, account_) {
+    //console.log("-- [request] inputToken");
+    let response = await contract_.methods.inputToken().call({ from: account_ });
+    //console.log("-- [response] inputToken :", response);
+    return response;
+}
+
+async function outputTokens_contract(contract_, account_, index_) {
+    //console.log("-- [request] outputTokens");
+    let response = await contract_.methods.outputTokens(index_).call({ from: account_ });
+    //console.log("-- [response] outputTokens :", response);
+    return response;
+}
+
+export { create_contract, wits_contract, weights_contract, inputToken_contract, outputTokens_contract };
