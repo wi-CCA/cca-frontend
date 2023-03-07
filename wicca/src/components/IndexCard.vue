@@ -1,5 +1,5 @@
 <script setup>
-import DistChart from "../components/DistChart.vue";
+import DistChart from "./DistChart.vue";
 </script>
 <template>
   <div class="uk-card uk-card-default golden-gradient rotate">
@@ -81,26 +81,5 @@ import DistChart from "../components/DistChart.vue";
 
 .padding-small {
   padding: 30px 40px 30px 40px;
-}
-
-.btn-gradient-border {
-  color: white;
-  border: 5px double transparent;
-  background-image: linear-gradient(rgba(13, 14, 33, 0), rgba(13, 14, 33, 0)),
-    radial-gradient(
-      circle at left top,
-      rgb(1, 110, 218) 0%,
-      rgb(217, 0, 192) 51%,
-      rgb(1, 110, 218) 100%
-    );
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-  border-radius: 20px;
-  transition: 0.5s;
-  background-size: 200% auto;
-}
-
-.btn-gradient-border:hover {
-  background-position: right center; /* change the direction of the change here */
 }
 </style>

@@ -117,6 +117,26 @@
   }
 }
 
+.btn-gradient-border {
+  color: white;
+  border: 5px double transparent;
+  background-image: linear-gradient(rgba(13, 14, 33, 0), rgba(13, 14, 33, 0)),
+    radial-gradient(circle at left top,
+      rgb(1, 110, 218) 0%,
+      rgb(217, 0, 192) 51%,
+      rgb(1, 110, 218) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  border-radius: 20px;
+  transition: 0.5s;
+  background-size: 200% auto;
+}
+
+.btn-gradient-border:hover {
+  background-position: right center;
+  /* change the direction of the change here */
+}
+
 .golden-gradient {
   background: linear-gradient(120deg, #ffffffe0 20%, #ffffffe0 40%, #ffffff 50%, #ffffff 55%, #ffffffe0 70%, #ffffffe0 100%);
   background-size: 200% auto;

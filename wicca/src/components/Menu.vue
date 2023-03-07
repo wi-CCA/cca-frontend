@@ -1,3 +1,42 @@
+<script setup>
+import CreateCard from "./CreateCard.vue";
+</script>
+<script>
+import { connectMetamask, getAccount } from "../assets/js/interface_request.js";
+export default {
+  data() {
+    return {
+      connected: false,
+      btnText: "connect wallet",
+      createCardKey: 0,
+    };
+  },
+  mounted() {
+    this.emitter.on("metamask-connect-event", (msg) => {
+      this.connected = msg;
+      if (this.connected) {
+        let account = getAccount();
+        this.btnText = account;
+      }
+    });
+  },
+  methods: {
+    connectOnClick: function () {
+      if (getAccount() !== "") return;
+      connectMetamask().then((success) => {
+        if (success) {
+          console.log("metamask successfully connected!");
+          this.emitter.emit("metamask-connect-event", true);
+        } else {
+          console.log("metamask connection failed!");
+          this.btnTest = "metamask required!";
+          this.emitter.emit("metamask-connect-event", false);
+        }
+      });
+    },
+  },
+};
+</script>
 <template>
   <div>
     <nav class="uk-navbar-container uk-navbar-transparent">
@@ -14,18 +53,24 @@
 
           <div class="uk-navbar-right">
             <ul class="uk-navbar-nav">
-              <!--li>
-                <a href="#">Account</a>
-                <div class="uk-navbar-dropdown">
-                  <ul class="uk-nav uk-navbar-dropdown-nav">
-                    <li class="uk-active"><a href="#">Active</a></li>
-                    <li><a href="#">Item</a></li>
-                    <li><a href="#">Item</a></li>
-                  </ul>
+              <li v-if="connected">
+                <a href="#modal-center" uk-toggle
+                  ><button class="uk-button uk-button-default" @click="createCardKey++">new card</button></a
+                >
+                <div id="modal-center" class="uk-flex-top" bg-close="false" uk-modal>
+                  <CreateCard :key="createCardKey"/>
                 </div>
-              </li-->
-              <li><a href="#"><button class="uk-button uk-button-default">new card</button></a></li>
-              <li><a href="#"><button class="uk-button uk-button-default">connect wallet</button></a></li>
+              </li>
+              <li>
+                <a href="#"
+                  ><button class="uk-button uk-button-default" @click="connectOnClick">
+                    <span
+                      style="display: block; overflow: hidden; text-overflow: ellipsis"
+                      >{{ btnText }}</span
+                    >
+                  </button></a
+                >
+              </li>
             </ul>
           </div>
         </div>

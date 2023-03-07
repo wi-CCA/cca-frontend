@@ -1,11 +1,30 @@
-<script setup>
+<script>
+import { connectContract } from "./assets/js/interface_request.js";
 import Menu from "./components/Menu.vue";
 import { RouterLink, RouterView } from "vue-router";
 
-function darkModeToggle() {
-  var element = document.body;
-  element.classList.toggle("toggle-color-mode");
-}
+export default {
+  data() {
+    return {
+      connected: false,
+      loading: false,
+    };
+  },
+  components: {
+    Menu,
+  },
+  mounted() {
+    this.emitter.on("metamask-connect-event", (msg) => {
+      this.connected = msg;
+    });
+
+    this.emitter.on("loading-event", (msg) => {
+      this.loading = msg;
+    });
+
+    connectContract();
+  },
+};
 </script>
 
 <template>
@@ -14,14 +33,6 @@ function darkModeToggle() {
     <div class="uk-padding">
       <RouterView />
     </div>
-    <!--div class="uk-width-1-1 uk-text-center uk-padding">
-      <div class="width-1-1">
-        <div class="switch">
-          <input id="checkbox1" class="look" type="checkbox" @click="darkModeToggle" />
-          <label for="checkbox1"></label>
-        </div>
-      </div>
-    </div-->
   </div>
 </template>
 
