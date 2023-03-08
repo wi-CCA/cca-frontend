@@ -141,53 +141,6 @@ function getTokenColor(index) {
     return "";
 }
 
-/*
-async function addTokenToMetamask(tokenName) {
-    const tokenContract = getContract(tokenName);
-    const symbol = await tokenContract.methods.symbol().call();
-    const decimals = await tokenContract.methods.decimals().call();
-    const tokenImage = getContractImg(tokenName);
-
-    const provider = window.ethereum;
-    if (provider) {
-        try {
-            // wasAdded is a boolean. Like any RPC method, an error may be thrown.
-            const wasAdded = await provider.request({
-                method: 'wallet_watchAsset',
-                params: {
-                    type: 'ERC20',
-                    options: {
-                        address: tokenContract._address,
-                        symbol: symbol,
-                        decimals: decimals,
-                        image: tokenImage,
-                    },
-                },
-            });
-            if (wasAdded) {
-                console.log('Thanks for your interest!');
-            } else {
-                console.log('Your loss!');
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
-}
-
-function getContractImg(contractName) {
-    if (contractName === "WMATIC") return 'https://github.com/D3LAB-DAO/FOX-frontend/blob/polygon/frontend/src/img/polygon-icon.png?raw=true';
-    else if (contractName === "FOXS") return 'https://github.com/FOX-Finance/FOX-frontend/blob/main/frontend/src/img/foxs-icon.png?raw=true';
-    else if (contractName === "FOX") return 'https://github.com/FOX-Finance/FOX-frontend/blob/main/frontend/src/img/fox-icon.png?raw=true';
-}
-
-function getApproveAddress(contractName) {
-    if (contractName === "WMATIC") return FOXFARM_CONTRACT_ADDR;
-    else if (contractName === "FOXS") return FOXFARM_CONTRACT_ADDR;
-    else if (contractName === "FOX") return FOXFARM_CONTRACT_ADDR;
-}
-*/
-
 /* 
  * Test Contract functions
  */

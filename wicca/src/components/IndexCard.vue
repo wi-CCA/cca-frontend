@@ -10,7 +10,7 @@ import {
   getMonthName,
 } from "../assets/js/interface_request.js";
 export default {
-  props: ["address"],
+  props: ["address", "id"],
   data() {
     return {
       inputToken: "",
@@ -71,7 +71,7 @@ export default {
     :class="{ 'default-gradient': !joined, 'golden-gradient': joined }"
   >
     <div class="uk-card-media-top">
-      <img src="../img/sample.png" width="1800" height="1200" alt="" />
+      <img :src="`/src/img/${id}.jpg`" width="1800" height="1200" alt="" />
     </div>
     <div>
       <div class="uk-card-header">
@@ -80,7 +80,7 @@ export default {
             class="uk-border-circle"
             width="60"
             height="60"
-            src="../img/avatar.jpeg"
+            :src="`/src/img/avatar${id}.png`"
             alt="Avatar"
             style="position: absolute; top: -50px; padding: 0"
           />

@@ -37,7 +37,7 @@ export default {
     <div class="width-1-1">
       <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-text-center" uk-grid>
         <div v-for="(address, index) in cardAddressList.slice().reverse()" :key="index">
-          <IndexCard :address="address" :key="address" />
+          <IndexCard :address="address" :id="cardAddressList.length - index - 1" :key="address" />
         </div>
       </div>
     </div>
