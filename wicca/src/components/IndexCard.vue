@@ -24,6 +24,14 @@ export default {
       interval: "-",
     };
   },
+  computed: {
+    cardSrc() {
+      return new URL(`/src/img/${this.id}.jpg`, import.meta.url).href;
+    },
+    avatarSrc() {
+      return new URL(`/src/img/avatar${this.id}.png`, import.meta.url).href;
+    }
+  },
   methods: {
     getIndexTokenNames() {
       let str = "";
@@ -71,7 +79,7 @@ export default {
     :class="{ 'default-gradient': !joined, 'golden-gradient': joined }"
   >
     <div class="uk-card-media-top">
-      <img :src="`/src/img/${id}.jpg`" width="1800" height="1200" alt="" />
+      <img :src="cardSrc" width="1800" height="1200" alt="" />
     </div>
     <div>
       <div class="uk-card-header">
@@ -80,7 +88,7 @@ export default {
             class="uk-border-circle"
             width="60"
             height="60"
-            :src="`/src/img/avatar${id}.png`"
+            :src="avatarSrc"
             alt="Avatar"
             style="position: absolute; top: -50px; padding: 0"
           />
