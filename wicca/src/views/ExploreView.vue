@@ -11,7 +11,9 @@ export default {
   },
   mounted() {
     this.emitter.on("metamask-connect-event", (msg) => {
+      this.emitter.emit("loading-event", true);
       getCardAdressList().then((res) => {
+        this.emitter.emit("loading-event", false);
         if (res != 0) {
           this.cardAddressList = res;
           console.log("success");
@@ -20,7 +22,9 @@ export default {
     });
 
     this.emitter.on("card-update-event", (msg) => {
+      this.emitter.emit("loading-event", true);
       getCardAdressList().then((res) => {
+        this.emitter.emit("loading-event", false);
         if (res != 0) {
           this.cardAddressList = res;
           console.log("success");

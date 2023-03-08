@@ -66,7 +66,7 @@ export default {
       <button
         class="uk-button btn-gradient-border uk-modal-close"
         type="button"
-        @click="EnrollOnClick"
+        disabled
       >
         Join
       </button>

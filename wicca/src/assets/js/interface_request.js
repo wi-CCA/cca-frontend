@@ -5,9 +5,9 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers } from "ethers";
 import { FACTORY_ADDR, FACTORY_ABI, CARD_ADDR_0, CARD_ADDR_1, CARD_ADDR_2, CARD_ABI, TOKEN_ADDR_0, TOKEN_ADDR_1, TOKEN_ADDR_2, TOKEN_ADDR_3, TOKEN_ADDR_4, TOKEN_ADDR_5, TOKEN_ABI } from "./contract.js"
 import { create_contract, wits_contract, weights_contract, inputToken_contract, outputTokens_contract, enroll_contract } from "./contract_request.js"
-const testChainId = '0x13881';
-const RPCUrl = 'https://matic-mumbai.chainstacklabs.com';
-const blockExploreUrl = 'https://mumbai.polygonscan.com';
+const testChainId = '0xFA';
+const RPCUrl = 'https://rpc.ankr.com/fantom/';
+const blockExploreUrl = 'https://ftmscan.com/';
 const localhostRPCUrl = 'http://localhost:8545';
 const localhostChainId = '0x1D79'; // 7545
 
@@ -39,7 +39,7 @@ async function connectMetamask() {
         try {
             await provider.request({
                 method: 'wallet_switchEthereumChain',
-                params: [{ chainId: localhostChainId }],
+                params: [{ chainId: testChainId }],
             });
             console.log("You have succefully switched to Binance Test network");
 
@@ -59,12 +59,12 @@ async function connectMetamask() {
                         method: 'wallet_addEthereumChain',
                         params: [
                             {
-                                chainId: localhostChainId,
-                                chainName: 'Mumbai',
-                                rpcUrls: [localhostRPCUrl],
+                                chainId: testChainId,
+                                chainName: 'Fantom Opera',
+                                rpcUrls: [RPCUrl],
                                 blockExplorerUrls: [blockExploreUrl],
                                 nativeCurrency: {
-                                    symbol: 'MATIC',
+                                    symbol: 'FTM',
                                     decimals: 18
                                 }
                             }
@@ -74,7 +74,7 @@ async function connectMetamask() {
                     // connect
                     await provider.request({
                         method: 'wallet_switchEthereumChain',
-                        params: [{ chainId: localhostChainId }],
+                        params: [{ chainId: testChainId }],
                     });
                     console.log("You have succefully switched to Binance Test network");
 

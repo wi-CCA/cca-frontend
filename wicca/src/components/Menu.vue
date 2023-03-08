@@ -44,11 +44,11 @@ export default {
         <div uk-navbar>
           <div class="uk-navbar-left">
             <div class="logo color-rainbow" style="display: inline-block">wicca</div>
-            <ul class="uk-navbar-nav">
+            <!--ul class="uk-navbar-nav">
               <li><a class="active" href="#">all</a></li>
               <li><a href="#">top</a></li>
               <li><a href="#">my</a></li>
-            </ul>
+            </ul-->
           </div>
 
           <div class="uk-navbar-right">
