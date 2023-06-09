@@ -2,7 +2,7 @@
 import IndexCard from "../components/IndexCard.vue";
 </script>
 <script>
-import { getCardAdressList } from "../assets/js/interface_request.js";
+import { getCardAddressList } from "../assets/js/interface_request.js";
 export default {
   data() {
     return {
@@ -12,7 +12,7 @@ export default {
   mounted() {
     this.emitter.on("metamask-connect-event", (msg) => {
       this.emitter.emit("loading-event", true);
-      getCardAdressList().then((res) => {
+      getCardAddressList().then((res) => {
         this.emitter.emit("loading-event", false);
         if (res != 0) {
           this.cardAddressList = res;
@@ -23,7 +23,7 @@ export default {
 
     this.emitter.on("card-update-event", (msg) => {
       this.emitter.emit("loading-event", true);
-      getCardAdressList().then((res) => {
+      getCardAddressList().then((res) => {
         this.emitter.emit("loading-event", false);
         if (res != 0) {
           this.cardAddressList = res;

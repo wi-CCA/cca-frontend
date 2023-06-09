@@ -29,7 +29,7 @@ export default {
       return new URL(`/src/img/${this.id}.jpg`, import.meta.url).href;
     },
     avatarSrc() {
-      return new URL(`/src/img/avatar${this.id}.png`, import.meta.url).href;
+      return new URL(`/src/img/avatar/${this.id}.png`, import.meta.url).href;
     }
   },
   methods: {

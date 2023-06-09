@@ -2,7 +2,11 @@
 import DistChart from "./DistChart.vue";
 </script>
 <script>
-import { getTokenName, getTokenColor, create } from "../assets/js/interface_request.js";
+import {
+  getTokenName,
+  getTokenColor,
+  create,
+} from "../assets/js/interface_request.js";
 const MAX_SUM = 10000;
 export default {
   data() {
@@ -16,7 +20,10 @@ export default {
   computed: {
     weightsum: {
       get() {
-        return this.getComputedWeights().reduce((partialSum, a) => partialSum + a, 0);
+        return this.getComputedWeights().reduce(
+          (partialSum, a) => partialSum + a,
+          0
+        );
       },
     },
   },
@@ -33,7 +40,9 @@ export default {
       this.selectedOutputTokenIndex = "";
     },
     removeToken(token) {
-      this.outputTokenIndexList = this.outputTokenIndexList.filter((t) => t !== token);
+      this.outputTokenIndexList = this.outputTokenIndexList.filter(
+        (t) => t !== token
+      );
       this.weights[token.id] = 0;
     },
     getComputedWeights() {
@@ -70,16 +79,15 @@ export default {
       return width.toFixed(4).toString() + "%";
     },
     CreateOnClick: function () {
-      if ( this.weightsum !== MAX_SUM ) return;
+      if (this.weightsum !== MAX_SUM) return;
       this.emitter.emit("loading-event", true);
       create(this.inputTokenIndex, this.getComputedWeights()).then((result) => {
         this.emitter.emit("loading-event", false);
         if (result) {
-            console.log("create success!");
-            /* modal close & update cards */
-            this.emitter.emit("card-update-event", true);
-        }
-        else console.log("create failed!");
+          console.log("create success!");
+          /* modal close & update cards */
+          this.emitter.emit("card-update-event", true);
+        } else console.log("create failed!");
       });
     },
   },
@@ -94,13 +102,19 @@ export default {
     </div>
     <div class="uk-modal-body">
       <div class="uk-margin">
-        <label class="uk-form-label" for="form-stacked-select">📩 INPUT TOKEN</label>
+        <label class="uk-form-label" for="form-stacked-select"
+          >📩 INPUT TOKEN</label
+        >
         <div class="uk-form-controls">
-          <select class="uk-select" aria-label="Select" v-model="inputTokenIndex">
+          <select
+            class="uk-select"
+            aria-label="Select"
+            v-model="inputTokenIndex"
+          >
             <option value="" selected disabled>Select token</option>
             <option value="0">BTC</option>
             <option value="1">ETH</option>
-            <option value="2">FTM</option>
+            <option value="2">MATIC</option>
             <option value="3">LINK</option>
             <option value="4">WICCA</option>
             <option value="5">USDC</option>
@@ -109,7 +123,9 @@ export default {
       </div>
 
       <div class="uk-margin">
-        <label class="uk-form-label" for="form-stacked-select">📦 OUTPUT TOKEN</label>
+        <label class="uk-form-label" for="form-stacked-select"
+          >📦 OUTPUT TOKEN</label
+        >
         <div class="uk-form-controls">
           <select
             class="uk-select"
@@ -120,15 +136,22 @@ export default {
             <option value="" selected disabled>Select token</option>
             <option value="0">BTC</option>
             <option value="1">ETH</option>
-            <option value="2">FTM</option>
+            <option value="2">MATIC</option>
             <option value="3">LINK</option>
             <option value="4">WICCA</option>
             <option value="5">USDC</option>
           </select>
         </div>
       </div>
-      <div class="uk-margin" v-for="(token, index) in outputTokenIndexList" :key="index">
-        <span class="token-name" :style="{ 'background-color': getTokenColor(token.id) }">
+      <div
+        class="uk-margin"
+        v-for="(token, index) in outputTokenIndexList"
+        :key="index"
+      >
+        <span
+          class="token-name"
+          :style="{ 'background-color': getTokenColor(token.id) }"
+        >
           {{ token.text }} ({{ getTokenRatio(token.id) }})</span
         >
         <button
@@ -162,7 +185,14 @@ export default {
       />
     </div>
     <div class="uk-modal-footer uk-text-center">
-      <button class="uk-button btn-gradient-border uk-modal-close" type="button" @click="CreateOnClick">Create</button>
+      <button
+        class="uk-button btn-gradient-border uk-modal-close"
+        type="button"
+        @click="CreateOnClick"
+        disabled
+      >
+        Create
+      </button>
     </div>
   </div>
 </template>
